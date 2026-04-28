@@ -1,22 +1,8 @@
-# Frontend Dockerfile
-FROM node:20-alpine
+FROM node:18 as build
 
 WORKDIR /app
-
-# Copy package files
-COPY package*.json ./
-RUN npm install --production=false
-
-# Copy source code
 COPY . .
+RUN npm install && npm run build
 
-# Build the app
-RUN npm run build
-
-# Install serve globally
-RUN npm install -g serve
-
-EXPOSE 3000
-
-# Use serve to host the static files
-CMD ["serve", "-s", "build", "-l", "3000", "--single"]
+FROM nginx:alpine
+COPY --from=build /app/build /usr/share/nginx/html
