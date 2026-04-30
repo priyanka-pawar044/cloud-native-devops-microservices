@@ -8,6 +8,12 @@ import { metricsMiddleware, setupMetrics } from './metrics';
 dotenv.config();
 
 const app = express();
+app.use(cors({
+  origin: "*",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
+}));
+
 const PORT: number = Number(process.env.GATEWAY_PORT) || 3001;
 
 app.use(helmet());
@@ -57,7 +63,6 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
   res.status(500).json({ error: 'Internal server error' });
 });
 
-app.listen(PORT, "0.0.0.0", () => {
-  console.log(`API Gateway running on port ${PORT}`);
-  console.log(`Proxying to services:`, services);
+app.listen(3000, () => {
+  console.log("Gateway running on port 3000");
 });

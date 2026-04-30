@@ -1,12 +1,13 @@
-FROM node:18
+FROM node:20
 
 WORKDIR /app
 
-COPY package*.json ./
-RUN npm install
-
 COPY . .
 
-EXPOSE 3000
+RUN npm install
+
+WORKDIR /app/services/gateway
+RUN npm install
+RUN npm run build
 
 CMD ["npm", "start"]
